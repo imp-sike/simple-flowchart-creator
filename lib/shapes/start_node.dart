@@ -30,7 +30,6 @@ class StartNode extends DrawableNode {
     return StartNode()
       ..textColor = textColor
       ..backgroundColor = backgroundColor
-      ..currentPosition = currentPosition
-      ..hasConnectionsTo = hasConnectionsTo;
+      ..currentPosition = currentPosition;
   }
 }

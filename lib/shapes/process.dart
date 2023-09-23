@@ -30,8 +30,7 @@ class ProcessNode extends DrawableNode {
     ProcessNode processNode = ProcessNode()
       ..textColor = textColor
       ..backgroundColor = backgroundColor
-      ..currentPosition = currentPosition
-      ..hasConnectionsTo = hasConnectionsTo;
+      ..currentPosition = currentPosition;
     return processNode;
   }
 }

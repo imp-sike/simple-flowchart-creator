@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wire_connection/helper/arrow_painter.dart';
 import 'package:wire_connection/shapes/drawable_node.dart';
 
 //ignore: must_be_immutable
@@ -31,8 +32,7 @@ class IONode extends DrawableNode {
     IONode ioNode = IONode()
       ..textColor = textColor
       ..backgroundColor = backgroundColor
-      ..currentPosition = currentPosition
-      ..hasConnectionsTo = hasConnectionsTo;
+      ..currentPosition = currentPosition;
     return ioNode;
   }
 }
