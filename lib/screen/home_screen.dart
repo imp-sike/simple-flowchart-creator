@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:wire_connection/helper/arrow_painter.dart';
 import 'package:wire_connection/helper/context_extension.dart';
+import 'package:wire_connection/shapes/connector_node.dart';
+import 'package:wire_connection/shapes/database_node.dart';
+import 'package:wire_connection/shapes/decision_node.dart';
+import 'package:wire_connection/shapes/function_node.dart';
 import 'package:wire_connection/shapes/input_output_node.dart';
-import 'package:wire_connection/shapes/process.dart';
+import 'package:wire_connection/shapes/process_node.dart';
 import 'package:wire_connection/shapes/start_node.dart';
 
 import '../shapes/drawable_node.dart';
@@ -17,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 enum SelectedSide { left, right, top, bottom }
 
 class _HomeScreenState extends State<HomeScreen> {
+  //
   final List<DrawableNode> _drawableNodes = [];
   late final List<DrawableNode> _uniqueNodes;
   int currentSelectedDrawableNode = 0;
@@ -31,7 +36,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _uniqueNodes = [StartNode(), IONode(), ProcessNode()];
+    _uniqueNodes = [
+      StartNode(),
+      IONode(),
+      ProcessNode(),
+      DecisionNode(),
+      ConnectorNode(),
+      // DatabaseNode(),
+      FunctionNode()
+    ];
     super.initState();
   }
 
@@ -95,18 +108,36 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: context.width * 0.2,
+              width: context.width * 0.15,
               height: context.height,
-              color: Colors.red,
-              child: ListView.builder(
-                itemCount: _uniqueNodes.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Draggable<DrawableNode>(
-                    data: _uniqueNodes[index],
-                    feedback: Material(child: _uniqueNodes[index]),
-                    child: _uniqueNodes[index],
-                  );
-                },
+              color: const Color(0xff111926),
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Flow Components",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                  Divider(),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _uniqueNodes.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Draggable<DrawableNode>(
+                          data: _uniqueNodes[index],
+                          feedback: Material(child: _uniqueNodes[index]),
+                          child: _uniqueNodes[index],
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
             DragTarget(
@@ -125,7 +156,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Container(
                   width: context.width * 0.6,
                   height: context.height,
-                  color: Colors.grey,
+                  margin: const EdgeInsets.only(top: 20, bottom: 10),
+                  color: const Color(0xfff4f677),
                   child: Stack(
                     children: [
                       ...buildStackItems(),
@@ -133,10 +165,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ignoring: true,
                         child: CustomPaint(
                           painter: ArrowPainter(_drawableNodes),
-                          child: Container(
+                          child: SizedBox(
                             width: context.width * 0.6,
                             height: context.height,
-                            color: Colors.amber.withAlpha(70),
                           ),
                         ),
                       ),
@@ -146,20 +177,24 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             Container(
-              width: context.width * 0.2,
-              color: Colors.green,
+              width: context.width * 0.15,
+              color: const Color(0xfff4f6fa),
               height: context.height,
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: ListView(
                   children: [
                     const Text("Editor Tab"),
+                    Divider(),
                     _drawableNodes.isEmpty
                         ? Container()
                         : TextField(
                             onChanged: (String newValue) {
+                              _drawableNodes.add(ConnectorNode());
                               _drawableNodes[currentSelectedDrawableNode]
                                   .shapeName = newValue;
+                              setState(() {});
+                              _drawableNodes.removeLast();
                               setState(() {});
                             },
                             controller: labelTextEditingController,

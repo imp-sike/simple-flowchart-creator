@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:wire_connection/shapes/drawable_node.dart';
 
 //ignore: must_be_immutable
-class ProcessNode extends DrawableNode {
-  ProcessNode({super.key}) {
-    shapeName = "Processing";
+class FunctionNode extends DrawableNode {
+  FunctionNode({super.key}) {
+    shapeName = "Function";
   }
 
   @override
@@ -15,6 +15,7 @@ class ProcessNode extends DrawableNode {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: backgroundColor,
+          border: Border.all(color: Colors.black),
         ),
         child: Text(
           getShapeName(),
@@ -27,10 +28,9 @@ class ProcessNode extends DrawableNode {
 
   @override
   DrawableNode newInstance() {
-    ProcessNode processNode = ProcessNode()
+    return FunctionNode()
       ..textColor = textColor
       ..backgroundColor = backgroundColor
       ..currentPosition = currentPosition;
-    return processNode;
   }
 }

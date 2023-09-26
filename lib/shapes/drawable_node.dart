@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wire_connection/helper/unstable_annotation.dart';
 import 'package:wire_connection/screen/home_screen.dart';
 
-@Unstable(
-  reason: "I am not sure whether the DrawableNode will be a Widget or"
-      "something custom that can be drawn in the flutter canvas",
-)
 // ignore: must_be_immutable
 abstract class DrawableNode extends StatelessWidget {
-  DrawableNode({super.key}) {
-    drawArrows();
-  }
+  DrawableNode({super.key});
 
   /// shape name
   /// It will be used by other components of the
@@ -42,9 +35,6 @@ abstract class DrawableNode extends StatelessWidget {
 
   /// returns a new instance of this with properties copied
   DrawableNode newInstance();
-
-  /// draw all the arrows that goes to the childrens
-  void drawArrows() {}
 }
 
 /// [DrawableNodeChild]

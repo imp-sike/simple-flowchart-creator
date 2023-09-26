@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:wire_connection/shapes/drawable_node.dart';
 
 //ignore: must_be_immutable
-class StartNode extends DrawableNode {
-  StartNode({super.key}) {
-    shapeName = "Start / End";
+class ProcessNode extends DrawableNode {
+  ProcessNode({super.key}) {
+    shapeName = "Processing";
   }
 
   @override
@@ -14,9 +14,9 @@ class StartNode extends DrawableNode {
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: backgroundColor,
-            border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(1000000)),
+          color: backgroundColor,
+          border: Border.all(color: Colors.black),
+        ),
         child: Text(
           getShapeName(),
           textAlign: TextAlign.center,
@@ -28,9 +28,10 @@ class StartNode extends DrawableNode {
 
   @override
   DrawableNode newInstance() {
-    return StartNode()
+    ProcessNode processNode = ProcessNode()
       ..textColor = textColor
       ..backgroundColor = backgroundColor
       ..currentPosition = currentPosition;
+    return processNode;
   }
 }

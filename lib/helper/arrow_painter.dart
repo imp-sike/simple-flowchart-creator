@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:wire_connection/screen/home_screen.dart';
 import 'package:wire_connection/shapes/drawable_node.dart';
 
+/// [ArrowPainter]
+///
+/// This painter is responsible to detect all the active connections in the
+/// list of nodes [drawableNodes] and draw a arrow from the offset
+/// of first node to second node of the two connected nodes.
+///
+/// We have to check for all the four directions (see [DrawableNodeChild])
+/// and draw them respectively.
+///
+/// Currently arrows does not have any arrow head.
 class ArrowPainter extends CustomPainter {
   List<DrawableNode> drawableNodes;
 
@@ -9,154 +19,122 @@ class ArrowPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // we will be using a black coloured line to draw all the arrows
     Paint paint = Paint()
       ..color = Colors.black
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 2.0;
 
+    _loopAllNodeAndDrawConnector(canvas, paint);
+  }
+
+  void _loopAllNodeAndDrawConnector(Canvas canvas, Paint paint) {
     for (var item in drawableNodes) {
-      if (item.hasConnectionsTo.left != null ||
-          item.hasConnectionsTo.leftTo != null) {
-        switch (item.hasConnectionsTo.leftTo) {
-          case null:
-            break;
-          case SelectedSide.left:
-            canvas.drawLine(
-                item.currentPosition + const Offset(10, 40),
-                item.hasConnectionsTo.left!.currentPosition +
-                    const Offset(10, 40),
-                paint);
-            break;
-          case SelectedSide.right:
-            canvas.drawLine(
-                item.currentPosition + const Offset(10, 40),
-                item.hasConnectionsTo.left!.currentPosition +
-                    const Offset(115, 40),
-                paint);
-            break;
-          case SelectedSide.top:
-            canvas.drawLine(
-                item.currentPosition + const Offset(10, 40),
-                item.hasConnectionsTo.left!.currentPosition +
-                    const Offset(65, 10),
-                paint);
-            break;
-          case SelectedSide.bottom:
-            canvas.drawLine(
-                item.currentPosition + const Offset(10, 40),
-                item.hasConnectionsTo.left!.currentPosition +
-                    const Offset(65, 70),
-                paint);
-            break;
-        }
-      }
+      // left
+      _checkAndConnectIfPossible(
+        item: item,
+        canvas: canvas,
+        paint: paint,
+        current: item.hasConnectionsTo.left,
+        currentSide: item.hasConnectionsTo.leftTo,
+        leftOffset: const Offset(10, 40),
+        rightOffset: const Offset(115, 40),
+        topOffset: const Offset(65, 10),
+        bottomOffset: const Offset(65, 70),
+        leftAlternativeOffset: const Offset(10, 40),
+        rightAlternativeOffset: const Offset(10, 40),
+        topAlternativeOffset: const Offset(10, 40),
+        bottomAlternativeOffset: const Offset(10, 40),
+      );
 
-      if (item.hasConnectionsTo.right != null ||
-          item.hasConnectionsTo.rightTo != null) {
-        switch (item.hasConnectionsTo.rightTo) {
-          case null:
-            break;
-          case SelectedSide.left:
-            canvas.drawLine(
-                item.currentPosition + const Offset(130, 40),
-                item.hasConnectionsTo.right!.currentPosition +
-                    const Offset(10, 40),
-                paint);
-            break;
-          case SelectedSide.right:
-            canvas.drawLine(
-                item.currentPosition + const Offset(130, 40),
-                item.hasConnectionsTo.right!.currentPosition +
-                    const Offset(115, 40),
-                paint);
-            break;
-          case SelectedSide.top:
-            canvas.drawLine(
-                item.currentPosition + const Offset(130, 40),
-                item.hasConnectionsTo.right!.currentPosition +
-                    const Offset(65, 10),
-                paint);
-            break;
-          case SelectedSide.bottom:
-            canvas.drawLine(
-                item.currentPosition + const Offset(130, 40),
-                item.hasConnectionsTo.right!.currentPosition +
-                    const Offset(65, 70),
-                paint);
-            break;
-        }
-      }
+      // right
+      _checkAndConnectIfPossible(
+        item: item,
+        canvas: canvas,
+        paint: paint,
+        current: item.hasConnectionsTo.right,
+        currentSide: item.hasConnectionsTo.rightTo,
+        leftAlternativeOffset: const Offset(130, 40),
+        leftOffset: const Offset(10, 40),
+        rightAlternativeOffset: const Offset(130, 40),
+        rightOffset: const Offset(115, 40),
+        topAlternativeOffset: const Offset(130, 40),
+        topOffset: const Offset(65, 10),
+        bottomAlternativeOffset: const Offset(130, 40),
+        bottomOffset: const Offset(65, 70),
+      );
 
-      if (item.hasConnectionsTo.top != null ||
-          item.hasConnectionsTo.topTo != null) {
-        switch (item.hasConnectionsTo.topTo) {
-          case null:
-            break;
-          case SelectedSide.left:
-            canvas.drawLine(
-                item.currentPosition + const Offset(65, 10),
-                item.hasConnectionsTo.top!.currentPosition +
-                    const Offset(10, 40),
-                paint);
-            break;
-          case SelectedSide.right:
-            canvas.drawLine(
-                item.currentPosition + const Offset(65, 10),
-                item.hasConnectionsTo.top!.currentPosition +
-                    const Offset(115, 40),
-                paint);
-            break;
-          case SelectedSide.top:
-            canvas.drawLine(
-                item.currentPosition + const Offset(65, 10),
-                item.hasConnectionsTo.top!.currentPosition +
-                    const Offset(65, 10),
-                paint);
-            break;
-          case SelectedSide.bottom:
-            canvas.drawLine(
-                item.currentPosition + const Offset(65, 10),
-                item.hasConnectionsTo.top!.currentPosition +
-                    const Offset(65, 70),
-                paint);
-            break;
-        }
-      }
+      // top
+      _checkAndConnectIfPossible(
+        item: item,
+        canvas: canvas,
+        paint: paint,
+        current: item.hasConnectionsTo.top,
+        currentSide: item.hasConnectionsTo.topTo,
+        leftAlternativeOffset: const Offset(65, 10),
+        leftOffset: const Offset(10, 40),
+        rightAlternativeOffset: const Offset(65, 10),
+        rightOffset: const Offset(115, 40),
+        topAlternativeOffset: const Offset(65, 10),
+        topOffset: const Offset(65, 10),
+        bottomAlternativeOffset: const Offset(65, 10),
+        bottomOffset: const Offset(65, 70),
+      );
 
-      if (item.hasConnectionsTo.bottom != null ||
-          item.hasConnectionsTo.bottomTo != null) {
-        switch (item.hasConnectionsTo.bottomTo) {
-          case null:
-            break;
-          case SelectedSide.left:
-            canvas.drawLine(
-                item.currentPosition + const Offset(65, 75),
-                item.hasConnectionsTo.bottom!.currentPosition +
-                    const Offset(10, 40),
-                paint);
-            break;
-          case SelectedSide.right:
-            canvas.drawLine(
-                item.currentPosition + const Offset(65, 75),
-                item.hasConnectionsTo.bottom!.currentPosition +
-                    const Offset(115, 40),
-                paint);
-            break;
-          case SelectedSide.top:
-            canvas.drawLine(
-                item.currentPosition + const Offset(65, 75),
-                item.hasConnectionsTo.bottom!.currentPosition +
-                    const Offset(65, 10),
-                paint);
-            break;
-          case SelectedSide.bottom:
-            canvas.drawLine(
-                item.currentPosition + const Offset(65, 75),
-                item.hasConnectionsTo.bottom!.currentPosition +
-                    const Offset(65, 70),
-                paint);
-            break;
-        }
+      // bottom
+      _checkAndConnectIfPossible(
+        item: item,
+        canvas: canvas,
+        paint: paint,
+        current: item.hasConnectionsTo.bottom,
+        currentSide: item.hasConnectionsTo.bottomTo,
+        leftAlternativeOffset: const Offset(65, 75),
+        leftOffset: const Offset(10, 40),
+        rightAlternativeOffset: const Offset(65, 75),
+        rightOffset: const Offset(115, 40),
+        topAlternativeOffset: const Offset(65, 75),
+        topOffset: const Offset(65, 10),
+        bottomAlternativeOffset: const Offset(65, 75),
+        bottomOffset: const Offset(65, 70),
+      );
+    }
+  }
+
+  void _checkAndConnectIfPossible({
+    required DrawableNode item,
+    required Canvas canvas,
+    required Paint paint,
+    required DrawableNode? current,
+    required SelectedSide? currentSide,
+    required Offset leftOffset,
+    required Offset rightOffset,
+    required Offset topOffset,
+    required Offset bottomOffset,
+    required Offset leftAlternativeOffset,
+    required Offset rightAlternativeOffset,
+    required Offset topAlternativeOffset,
+    required Offset bottomAlternativeOffset,
+  }) {
+    if (current != null || currentSide != null) {
+      switch (currentSide) {
+        case null:
+          break;
+        case SelectedSide.left:
+          canvas.drawLine(item.currentPosition + leftAlternativeOffset,
+              current!.currentPosition + leftOffset, paint);
+          break;
+        case SelectedSide.right:
+          canvas.drawLine(item.currentPosition + rightAlternativeOffset,
+              current!.currentPosition + rightOffset, paint);
+          break;
+        case SelectedSide.top:
+          canvas.drawLine(item.currentPosition + topAlternativeOffset,
+              current!.currentPosition + topOffset, paint);
+          break;
+        case SelectedSide.bottom:
+          canvas.drawLine(item.currentPosition + bottomAlternativeOffset,
+              current!.currentPosition + bottomOffset, paint);
+          break;
       }
     }
   }

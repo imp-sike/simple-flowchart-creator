@@ -15,12 +15,17 @@ class IONode extends DrawableNode {
       child: ClipPath(
         clipper: IONodeClipper(),
         child: Container(
-          padding: const EdgeInsets.all(10),
           color: backgroundColor,
-          child: Text(
-            getShapeName(),
-            textAlign: TextAlign.center,
-            style: TextStyle(color: textColor),
+          child: CustomPaint(
+            painter: IONodeBorder(),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                getShapeName(),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: textColor),
+              ),
+            ),
           ),
         ),
       ),
@@ -37,6 +42,40 @@ class IONode extends DrawableNode {
   }
 }
 
+class IONodeBorder extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0
+      ..color = Colors.black;
+
+    final path = Path();
+    // Create the four points of the parallelogram.
+    final point1 = Offset(0.1 * size.width, 0);
+    final point2 = Offset(size.width, 0);
+    final point3 = Offset(size.width * 0.9, size.height);
+    final point4 = Offset(0, size.height);
+
+    // Add the four points to the path.
+    path.moveTo(point1.dx, point1.dy);
+    path.lineTo(point2.dx, point2.dy);
+    path.lineTo(point3.dx, point3.dy);
+    path.lineTo(point4.dx, point4.dy);
+
+    // Close the path.
+    path.close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+/// custom clipper made for the IO node background shape
 class IONodeClipper extends CustomClipper<Path> {
   @override
   getClip(Size size) {

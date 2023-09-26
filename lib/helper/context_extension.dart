@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 extension ContextExtension on BuildContext {
@@ -9,6 +8,14 @@ extension ContextExtension on BuildContext {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         content: Text(message),
+      ),
+    );
+  }
+
+  void navigateToReplace(Widget screen) {
+    Navigator.of(this).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => screen,
       ),
     );
   }
