@@ -4,4 +4,4 @@ A hobby project, uses custom painter for creating the effects.
 ### Screenshot
 !["nice one"](/screenshot.png)
 
-!["nice one 2"](/capture.webm)
+!["nice one 2"](/screen-capture.gif)
